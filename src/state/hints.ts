@@ -103,6 +103,10 @@ export async function copyHint(item: LocalHint) {
   const trueItemPlayer = item.player.replace('&lt;', '<').replace('&gt;', '>');
   const trueItemOwner = item.owner.replace('&lt;', '<').replace('&gt;', '>');
 
+  const options: any = { locale: settings.value.hintCopyLanguage };
+  if (settings.value.hintCopyLanguage === 'default') delete options.locale;
+  console.log(options)
+
   let result: boolean | void;
   switch (settings.value.hintCopyType) {
     case 'markdown':
@@ -111,7 +115,7 @@ export async function copyHint(item: LocalHint) {
         item: item.item,
         player: trueItemOwner,
         location: item.location
-      })).catch(() => false);
+      }, options)).catch(() => false);
       break;
     case 'plain':
       result = await navigator.clipboard.writeText(t('Hints.hintCopyBasic', {
@@ -119,7 +123,7 @@ export async function copyHint(item: LocalHint) {
         item: item.item,
         player: trueItemOwner,
         location: item.location
-      })).catch(() => false);
+      }, options)).catch(() => false);
       break;
     case 'item-name':
       result = await navigator.clipboard.writeText(item.item).catch(() => false);
@@ -128,7 +132,7 @@ export async function copyHint(item: LocalHint) {
       result = await navigator.clipboard.writeText(t('Hints.hintCopyScream', {
         player: trueItemOwner.toUpperCase(),
         item: item.item.toUpperCase()
-      })).catch(() => false);
+      }, options)).catch(() => false);
       break;
   }
 
