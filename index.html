@@ -27,3 +27,28 @@
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
+
+<script>
+(() => {
+    const OriginalWebSocket = window.WebSocket;
+
+    window.WebSocket = class extends OriginalWebSocket {
+        constructor(url, protocols) {
+            const target = new URL(String(url));
+
+            if (
+                target.hostname === "7xda34p8k3.apps.bot-hosting.cloud" &&
+                target.port === "38281" &&
+                target.protocol === "wss:"
+            ) {
+                target.port = "443";
+                console.log("Archipelago: Corrected WebSocket port to 443");
+            }
+
+            super(target.href, ...(protocols === undefined ? [] : [protocols]));
+        }
+    };
+
+    console.log("Archipelago WebSocket fix activated!");
+})();
+</script>
