@@ -36,16 +36,33 @@
         constructor(url, protocols) {
             const target = new URL(String(url));
 
+            // Přímá IP adresa Archipelago serveru
+            if (
+                target.hostname === "144.76.87.43" &&
+                target.port === "26559"
+            ) {
+                target.protocol = "wss:";
+                target.hostname = "7xda34p8k3.apps.bot-hosting.cloud";
+                target.port = "";
+
+                console.log("Archipelago: IP redirected to secure proxy");
+            }
+
+            // Oprava výchozího portu 38281
             if (
                 target.hostname === "7xda34p8k3.apps.bot-hosting.cloud" &&
                 target.port === "38281" &&
                 target.protocol === "wss:"
             ) {
-                target.port = "443";
-                console.log("Archipelago: Corrected WebSocket port to 443");
+                target.port = "";
+
+                console.log("Archipelago: Corrected port to 443");
             }
 
-            super(target.href, ...(protocols === undefined ? [] : [protocols]));
+            super(
+                target.href,
+                ...(protocols === undefined ? [] : [protocols])
+            );
         }
     };
 
